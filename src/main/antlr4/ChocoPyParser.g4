@@ -72,10 +72,22 @@ literal
 
 expr
     : cexpr
+    | iexpr
+    | mexpr
     | NOT expr
     | expr (AND | OR) expr
     | expr IF expr ELSE expr
     ;
+
+iexpr
+    : index_expr
+    ;
+
+mexpr
+    : member_expr
+    | member_expr OPEN_PAREN (expr (COMMA expr)* )? OPEN_PAREN
+    ;
+
 
 cexpr
     : (IDENTIFIER | literal) cexpr_recur?
@@ -100,6 +112,10 @@ bin_op
 
 member_expr
     : cexpr DOT IDENTIFIER
+    ;
+
+member_expr_prime
+    : DOT IDENTIFIER member_expr_prime
     ;
 
 index_expr
