@@ -38,7 +38,8 @@
                     </execution>
                 </executions>
                 <configuration>
-
+                    <visitor>true</visitor>
+                    <atn>true</atn>
                 </configuration>
             </plugin>
 
