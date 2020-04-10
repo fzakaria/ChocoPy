@@ -3,20 +3,20 @@ parser grammar ChocoPyParser;
 options { tokenVocab=ChocoPyLexer; }
 
 program
-    : (var_def | func_def | class_def)* stmt*
+    : (var_def | func_def | class_def)* stmt* EOF
     ;
 
 class_def
-    : CLASS IDENTIFIER OPEN_PAREN IDENTIFIER CLOSE_PAREN COLON NEWLINE INDENT class_body DEDENT
+    : CLASS IDENTIFIER OPEN_PAREN IDENTIFIER CLOSE_PAREN COLON LINE_BREAK INDENT class_body DEDENT
     ;
 
 class_body
-    : PASS NEWLINE
+    : PASS LINE_BREAK
     | (var_def | func_def)+
     ;
 
 func_def
-    : DEF IDENTIFIER OPEN_PAREN (typed_var (COMMA typed_var)*)? CLOSE_PAREN (ARROW type)? COLON NEWLINE INDENT func_body DEDENT
+    : DEF IDENTIFIER OPEN_PAREN (typed_var (COMMA typed_var)*)? CLOSE_PAREN (ARROW type)? COLON LINE_BREAK INDENT func_body DEDENT
     ;
 
 func_body
@@ -32,19 +32,19 @@ type
     ;
 
 global_decl
-    : GLOBAL IDENTIFIER NEWLINE
+    : GLOBAL IDENTIFIER LINE_BREAK
     ;
 
 nonlocal_decl
-    : NONLOCAL IDENTIFIER NEWLINE
+    : NONLOCAL IDENTIFIER LINE_BREAK
     ;
 
 var_def
-    : typed_var ASSIGN literal NEWLINE
+    : typed_var ASSIGN literal LINE_BREAK
     ;
 
 stmt
-    : simple_stmt NEWLINE
+    : simple_stmt LINE_BREAK
     | IF expr COLON block (ELIF expr COLON block)* (ELSE COLON block)?
     | WHILE expr COLON block
     | FOR IDENTIFIER IN expr COLON block
@@ -58,7 +58,7 @@ simple_stmt
     ;
 
 block
-    : NEWLINE INDENT stmt+ DEDENT
+    : LINE_BREAK INDENT stmt+ DEDENT
     ;
 
 literal
@@ -78,16 +78,18 @@ expr
     ;
 
 cexpr
-    : IDENTIFIER
-    | literal
-    | OPEN_BRACKET (expr (COMMA expr)*)? CLOSE_BRACKET
+    : (IDENTIFIER | literal) cexpr_recur?
+    | (OPEN_BRACKET (expr COMMA expr)*)? CLOSE_BRACKET
     | OPEN_PAREN expr CLOSE_PAREN
-   // | member_expr
-   // | index_expr
-   // | member_expr OPEN_PAREN (expr (COMMA expr)* )? OPEN_PAREN
     | IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
-    | cexpr bin_op cexpr
     | MINUS cexpr
+    ;
+
+cexpr_recur
+    : bin_op cexpr
+    | member_expr
+    | index_expr
+    | cexpr
     ;
 
 bin_op

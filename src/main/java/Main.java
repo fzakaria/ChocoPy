@@ -35,6 +35,8 @@ public class Main {
         final ChocoPyParser parser = new ChocoPyParser(
                 new CommonTokenStream(lexer)
         );
+        parser.setBuildParseTree(true);
+        System.out.println(parser.program().toStringTree());
     }
 
     private static void runFile(String arg) throws IOException {
@@ -42,5 +44,7 @@ public class Main {
         final ChocoPyParser parser = new ChocoPyParser(
                 new CommonTokenStream(lexer)
         );
+        parser.setBuildParseTree(true);
+        System.out.println(parser.program().toStringTree(parser));
     }
 }
