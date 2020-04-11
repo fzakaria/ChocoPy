@@ -78,14 +78,16 @@ expr
     ;
 
 cexpr
-    : IDENTIFIER                                                                 # iden_expr
-    | literal                                                                    # literal_expr
-    | OPEN_BRACKET (expr (COMMA expr)*)? CLOSE_BRACKET                           # list_compr_expr
-    | OPEN_PAREN expr CLOSE_PAREN                                                # group_expr
-    | cexpr OPEN_BRACKET expr CLOSE_BRACKET                                      # array_expr
-    | (cexpr DOT)? IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN       # func_call_expr
-    | cexpr bin_op cexpr                                                         # bin_op_expr
-    | MINUS cexpr                                                                # unary_op_expr
+    : IDENTIFIER
+    | literal
+    | OPEN_BRACKET (expr (COMMA expr)*)? CLOSE_BRACKET
+    | OPEN_PAREN expr CLOSE_PAREN
+    | cexpr DOT IDENTIFIER
+    | cexpr OPEN_BRACKET expr CLOSE_BRACKET
+    | IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
+    | cexpr DOT IDENTIFIER OPEN_PAREN (expr (COMMA expr)*)? CLOSE_PAREN
+    | cexpr bin_op cexpr
+    | MINUS cexpr
     ;
 
 bin_op
@@ -96,7 +98,7 @@ bin_op
 
 
 target
-    : IDENTIFIER                                                                # iden_target
-    | cexpr DOT IDENTIFIER                                                      # member_target
-    | cexpr OPEN_BRACKET expr CLOSE_BRACKET                                     # index_target
+    : IDENTIFIER
+    | cexpr DOT IDENTIFIER
+    | cexpr OPEN_BRACKET expr CLOSE_BRACKET
     ;
