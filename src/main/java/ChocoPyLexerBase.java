@@ -93,7 +93,7 @@ public abstract class ChocoPyLexerBase extends Lexer {
     @Override
     public Token nextToken() {
         // Check if the end-of-file is ahead and there are still some DEDENTS expected.
-        if (_input.LA(1) == EOF && _indents.size() > 0)
+        if (_input.LA(1) == EOF)
         {
             if (_buffer[_lastTokenInd] == null || _buffer[_lastTokenInd].getType() != ChocoPyLexer.LINE_BREAK)
             {
