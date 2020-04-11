@@ -1,7 +1,6 @@
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ListTokenSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,10 +33,10 @@ public class Main {
     private static void run(String line) {
         ChocoPyLexer lexer = new ChocoPyLexer(CharStreams.fromString(line));
         final ChocoPyParser parser = new ChocoPyParser(
-                new CommonTokenStream(new ListTokenSource(lexer.getAllTokens()))
+                new CommonTokenStream(lexer)
         );
         parser.setBuildParseTree(true);
-        System.out.println(parser.program().toStringTree(parser));
+        System.out.println(parser.program().toStringTree());
     }
 
     private static void runFile(String arg) throws IOException {
